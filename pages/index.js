@@ -48,11 +48,10 @@ function App() {
 
   // update on the current time of audio
   useEffect(() => {
-    console.log(audioRef.current.currentTime)
+    // console.log(audioRef.current.currentTime)
     progressBarRef.current.value = Math.floor(audioRef.current.currentTime);
     progressBarRef.current.style.setProperty('--move-progressbar', `${progressBarRef.current.value / calculateTime(audioRef.current.duration) * 100}%`);
-    // setCurrentTime(progressBarRef.current.value);
-    // animationRef.current = requestAnimationFrame(progressBarRef);
+
     if (currentTime >= audioRef.current.duration) {
       next();
     }
@@ -60,30 +59,17 @@ function App() {
 
   // run on first load
   useEffect(() => {
-    console.log("firstLoad")
     onLoadedMetadata()
   }, [])
 
 
   // set duration everytime the player has loaded metadata
   const onLoadedMetadata = () => {
-    console.log("loaded")
     const seconds = Math.floor(audioRef.current.duration);
     // console.log("onloaded metadata");
     setDuration(seconds);
     progressBarRef.current.max = seconds;
   };
-
-  // const updateCurrentTime = () => {
-  //   setCurrentTime(progressBarRef.current.value);
-  // }
-
-  // const whilePlaying = () => {
-  //   // progressBarRef.current.value = Math.floor(audioRef.current.currentTime);
-  //   // updateCurrentTime();
-  //   // console.log("whileplaying", animationRef.current);
-  //   // animationRef.current = requestAnimationFrame(whilePlaying);
-  // }
   
   const togglePlayPause = () => {
     const prevState = isPlaying;
