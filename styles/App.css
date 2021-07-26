@@ -1,0 +1,56 @@
+.App {
+  text-align: center;
+  background-color: rgb(226, 232, 240);
+  width: 1000px;
+  display: flex;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: 25px;
+
+
+}
+
+.image { 
+  object-fit: cover;
+  width: 250px;
+  height: 250px;
+}
+
+.image-container { 
+  display: flex;
+  align-items: center;
+}
+
+.player-container {
+  padding-left: 15px;
+  padding-right: 15px;
+  text-align: start;
+}
+
+.author {
+  color: #E64415;
+}
+
+.title {
+  color: #000000;
+  width: 400px;
+}
+
+.progress-bar {
+  width: 100%;
+}
+
+.time-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.time-container h5 {
+  margin-top: 0px;
+  padding-left: 3px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+}
