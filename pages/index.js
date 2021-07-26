@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import tracks from './api/tracks';
 import { FaPlay, FaPause, FaBackward, FaForward, FaVolumeMute, FaVolumeUp } from 'react-icons/fa'
+import Image from 'next/image'
 
 function App() {
   //track Index of tracks from tracks.js
@@ -26,7 +27,6 @@ function App() {
   // everytime we change song
   useEffect( () => {
     pause();
-    console.log(tracks[tracksIndex].img)
     // for first render of the page, makes the player on pause
     if (isReady.current) {
       //fix the error promise undeffined when skipping songs too fast
@@ -156,7 +156,9 @@ function App() {
       >
       </audio>
       <div className="image-container">
-      <img
+      <Image
+      height="250"
+      width="250"
       className="image" 
       src={img} 
       alt={`track art for ${title} by ${artist}`}
