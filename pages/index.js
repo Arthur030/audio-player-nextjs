@@ -48,7 +48,7 @@ function App() {
 
   // update on the current time of audio
   useEffect(() => {
-    console.log(currentTime, 'useEffect on currentTime');
+    console.log(audioRef.current.currentTime)
     progressBarRef.current.value = Math.floor(audioRef.current.currentTime);
     progressBarRef.current.style.setProperty('--move-progressbar', `${progressBarRef.current.value / calculateTime(audioRef.current.duration) * 100}%`);
     // setCurrentTime(progressBarRef.current.value);
@@ -58,15 +58,16 @@ function App() {
     }
   }, [currentTime])
 
-
-  // useEffect(() => {
-  //   toggleMute();
-  //   console.log(isMuted);
-  // }, [isMuted])
+  // run on first load
+  useEffect(() => {
+    console.log("firstLoad")
+    onLoadedMetadata()
+  }, [])
 
 
   // set duration everytime the player has loaded metadata
   const onLoadedMetadata = () => {
+    console.log("loaded")
     const seconds = Math.floor(audioRef.current.duration);
     // console.log("onloaded metadata");
     setDuration(seconds);
@@ -103,6 +104,7 @@ function App() {
   };
   
   const changeAudioToProgressBar = () => {
+  //   await onLoadedMetadata();
     audioRef.current.currentTime = progressBarRef.current.value;
     setCurrentTime(progressBarRef.current.value);
   }
@@ -210,7 +212,7 @@ function App() {
       </div>
 
       </div>
-      <h1>audio-player-clean</h1>
+      <h1>audio-player-nextjs</h1>
     </div>
 
   );
