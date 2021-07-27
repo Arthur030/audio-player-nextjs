@@ -35,6 +35,7 @@ function App() {
         //   playPromise.then(() => {
           play();
           setIsPlaying(true);
+          setDuration(audioRef.current.duration)
         // })
         // .catch(error => {
         //   console.log("handling error promise play()");
@@ -65,11 +66,17 @@ function App() {
 
 
   // set duration everytime the player has loaded metadata
-  const onLoadedMetadata = () => {
-    const seconds = Math.floor(audioRef.current.duration);
-    // console.log("onloaded metadata");
-    setDuration(seconds);
-    progressBarRef.current.max = seconds;
+  const onLoadedMetadata = async() => {
+    try {
+      await audioRef.current.onLoadedMetadata
+      console.log("onLoadedMetadata try")
+      const seconds = Math.floor(audioRef.current.duration);
+      // console.log("onloaded metadata");
+      setDuration(seconds);
+      progressBarRef.current.max = seconds;
+    } catch {
+      console.log("onLoadedMetadata catch")
+    }
   };
   
   const togglePlayPause = () => {
@@ -98,7 +105,7 @@ function App() {
   
   const changeAudioToProgressBar = async () => {
     try {
-      await audioRef.current.onCanPlayThrough
+      await audioRef.current.onLoadedMetadata
       console.log("progressBar did await")
       audioRef.current.currentTime = progressBarRef.current.value;
       setCurrentTime(progressBarRef.current.value);
@@ -206,7 +213,7 @@ function App() {
       />
       <div className="time-container">
         <h5>{calculateTime(currentTime)}</h5>
-        <h5>{ calculateTime(duration) }</h5>
+        <h5>{ duration ? calculateTime(duration) : "00:00" }</h5>
       </div>
 
       </div>
