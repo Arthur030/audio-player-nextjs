@@ -57,7 +57,7 @@ function App() {
     if (currentTime >= audioRef.current.duration) {
       setTracksIndex(tracksIndex + 1)
     }
-  }, [currentTime])
+  }, [audioRef?.current?.onLoadedMetadata, audioRef?.current?.readyState]);
 
   // run on first load
   useEffect(() => {
@@ -98,7 +98,7 @@ function App() {
       await audioRef.current.play()
       console.log("play promise success")
     } catch {
-      console.log("play promise failed")
+      console.log("play promise failed, retrying...")
     }
       
   };
@@ -108,14 +108,9 @@ function App() {
   };
   
   const changeAudioToProgressBar = async () => {
-    try {
       await audioRef.current.onLoadedMetadata
-      console.log("progressBar did await")
       audioRef.current.currentTime = progressBarRef.current.value;
       setCurrentTime(progressBarRef.current.value);
-    } catch {
-      console.log("progressBar did not await")
-    }
   }
 
   const calculateTime = (secs) => {
