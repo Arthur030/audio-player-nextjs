@@ -30,16 +30,16 @@ function App() {
     // for first render of the page, makes the player on pause
     if (isReady.current) {
       // fix the error promise undeffined when skipping songs too fast
-        const playPromise = audioRef.current.play();
-        if (playPromise !== undefined) {
-          playPromise.then(() => {
+        // const playPromise = audioRef.current.play();
+        // if (playPromise !== undefined) {
+        //   playPromise.then(() => {
           play();
           setIsPlaying(true);
-        })
-        .catch(error => {
-          console.log("handling error promise play()");
-        })
-        }
+        // })
+        // .catch(error => {
+        //   console.log("handling error promise play()");
+        // })
+        // }
     } else {
       // once page has loaded once
       isReady.current = true;
@@ -82,11 +82,14 @@ function App() {
     }
   };
 
-  const play = async() => {
-
-    const promise = await audioRef.current.onCanPlayThrough;
-
-    audioRef.current.play();
+  const play = async () => {
+    try {
+      await audioRef.current.play()
+      console.log("play promise success")
+    } catch {
+      console.log("play promise failed")
+    }
+      
   };
 
   const pause = () => {
@@ -94,9 +97,14 @@ function App() {
   };
   
   const changeAudioToProgressBar = async () => {
-    await audioRef.current.onCanPlayThrough
-    audioRef.current.currentTime = progressBarRef.current.value;
-    setCurrentTime(progressBarRef.current.value);
+    try {
+      await audioRef.current.onCanPlayThrough
+      console.log("progressBar did await")
+      audioRef.current.currentTime = progressBarRef.current.value;
+      setCurrentTime(progressBarRef.current.value);
+    } catch {
+      console.log("progressBar did not await")
+    }
   }
 
   const calculateTime = (secs) => {
@@ -142,7 +150,7 @@ function App() {
       <audio 
       ref={audioRef} 
       src={audio} 
-      preload="metadata" 
+      preload="metadata"
       onLoadedMetadata={onLoadedMetadata}
       onTimeUpdate={ () => setCurrentTime(audioRef.current.currentTime)}
       >
@@ -198,7 +206,7 @@ function App() {
       />
       <div className="time-container">
         <h5>{calculateTime(currentTime)}</h5>
-        <h5>{ (duration && !isNaN(duration)) && calculateTime(duration) }</h5>
+        <h5>{ calculateTime(duration) }</h5>
       </div>
 
       </div>
