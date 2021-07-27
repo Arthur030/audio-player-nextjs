@@ -107,7 +107,8 @@ function App() {
     audioRef.current.pause();
   };
   
-  const changeAudioToProgressBar =  () => {
+  const changeAudioToProgressBar =  async() => {
+    await audioRef.current.readyState > 3
     audioRef.current.currentTime = progressBarRef.current.value;
     setCurrentTime(progressBarRef.current.value);
   }
