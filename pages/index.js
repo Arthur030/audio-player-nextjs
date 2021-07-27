@@ -30,16 +30,16 @@ function App() {
     // for first render of the page, makes the player on pause
     if (isReady.current) {
       // fix the error promise undeffined when skipping songs too fast
-        const playPromise = audioRef.current.play();
-        if (playPromise !== undefined) {
-          playPromise.then(() => {
+        // const playPromise = audioRef.current.play();
+        // if (playPromise !== undefined) {
+        //   playPromise.then(() => {
           play();
           setIsPlaying(true);
-        })
-        .catch(error => {
-          console.log("handling error promise play()");
-        })
-        }
+        // })
+        // .catch(error => {
+        //   console.log("handling error promise play()");
+        // })
+        // }
     } else {
       // once page has loaded once
       isReady.current = true;
@@ -54,7 +54,7 @@ function App() {
     progressBarRef.current.style.setProperty('--move-progressbar', `${progressBarRef.current.value / calculateTime(audioRef.current.duration) * 100}%`);
 
     if (currentTime >= audioRef.current.duration) {
-      next();
+      setTracksIndex(tracksIndex + 1)
     }
   }, [currentTime])
 
@@ -84,7 +84,7 @@ function App() {
 
   const play = async() => {
 
-    await audioRef.current.onCanPlayThrough;
+    const promise = await audioRef.current.onCanPlayThrough;
 
     audioRef.current.play();
   };
