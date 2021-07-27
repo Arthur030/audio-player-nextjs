@@ -30,16 +30,16 @@ function App() {
     // for first render of the page, makes the player on pause
     if (isReady.current) {
       // fix the error promise undeffined when skipping songs too fast
-        // const playPromise = audioRef.current.play();
-        // if (playPromise !== undefined) {
-        //   playPromise.then(() => {
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
           play();
           setIsPlaying(true);
-        // })
-        // .catch(error => {
-        //   console.log("handling error promise play()");
-        // })
-        // }
+        })
+        .catch(error => {
+          console.log("handling error promise play()");
+        })
+        }
     } else {
       // once page has loaded once
       isReady.current = true;
