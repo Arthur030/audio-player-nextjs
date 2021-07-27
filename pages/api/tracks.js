@@ -28,8 +28,8 @@ const tracks = [
     {
     title: "Song 3",
     artist: "Artist 3",
-    img: "/images/ricardo.jpg",
-    audio: "/audio/ricardo.mp3"
+    img: "/images/rogan.jpg",
+    audio: "/audio/rogan.mp3"
     },
     {
     title: "Song 4",
