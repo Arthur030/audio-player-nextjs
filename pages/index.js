@@ -158,7 +158,7 @@ function App() {
       src={audio} 
       preload="metadata"
       onLoadedMetadata={onLoadedMetadata}
-      onTimeUpdate={ () => setCurrentTime(audioRef.current.currentTime)}
+      onTimeUpdate={ () => setCurrentTime(audioRef.current.currentTime, setDuration(audioRef.current.duration))}
       >
       </audio>
       <div className="image-container">
