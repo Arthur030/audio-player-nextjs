@@ -29,17 +29,17 @@ function App() {
     pause();
     // for first render of the page, makes the player on pause
     if (isReady.current) {
-      //fix the error promise undeffined when skipping songs too fast
-      const playPromise = audioRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.then(() => {
+      // fix the error promise undeffined when skipping songs too fast
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
           play();
           setIsPlaying(true);
         })
         .catch(error => {
-          console.log("error promise play()");
+          console.log("handling error promise play()");
         })
-      }
+        }
     } else {
       // once page has loaded once
       isReady.current = true;
@@ -49,6 +49,7 @@ function App() {
   // update on the current time of audio
   useEffect(() => {
     // console.log(audioRef.current.currentTime)
+    onLoadedMetadata();
     progressBarRef.current.value = Math.floor(audioRef.current.currentTime);
     progressBarRef.current.style.setProperty('--move-progressbar', `${progressBarRef.current.value / calculateTime(audioRef.current.duration) * 100}%`);
 
@@ -81,7 +82,10 @@ function App() {
     }
   };
 
-  const play = () => {
+  const play = async() => {
+
+    await audioRef.current.onCanPlayThrough;
+
     audioRef.current.play();
   };
 
@@ -89,8 +93,8 @@ function App() {
     audioRef.current.pause();
   };
   
-  const changeAudioToProgressBar = () => {
-  //   await onLoadedMetadata();
+  const changeAudioToProgressBar = async () => {
+    await audioRef.current.onCanPlayThrough
     audioRef.current.currentTime = progressBarRef.current.value;
     setCurrentTime(progressBarRef.current.value);
   }
