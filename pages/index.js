@@ -67,16 +67,20 @@ function App() {
 
   // set duration everytime the player has loaded metadata
   const onLoadedMetadata = async() => {
-    try {
-      await audioRef.current.onLoadedMetadata
-      console.log("onLoadedMetadata try")
-      const seconds = Math.floor(audioRef.current.duration);
-      // console.log("onloaded metadata");
-      setDuration(seconds);
-      progressBarRef.current.max = seconds;
-    } catch {
-      console.log("onLoadedMetadata catch")
-    }
+    await audioRef.current.onLoadedMetadata
+    const seconds = Math.floor(audioRef.current.duration)
+    setDuration(seconds)
+    progressBarRef.current.max = seconds
+  
+    // try {
+    //   await audioRef.current.onLoadedMetadata
+    //   console.log("onLoadedMetadata try")
+    //   const seconds = Math.floor(audioRef.current.duration);
+    //   setDuration(seconds);
+    //   progressBarRef.current.max = seconds;
+    // } catch {
+    //   console.log("onLoadedMetadata catch")
+    // }
   };
   
   const togglePlayPause = () => {
