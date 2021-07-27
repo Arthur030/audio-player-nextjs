@@ -95,6 +95,7 @@ function App() {
   const play = async () => {
     try {
       await audioRef.current.play()
+      setDuration(audioRef.current.duration)
       console.log("play promise success")
     } catch {
       console.log("play promise failed, retrying...")
