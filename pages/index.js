@@ -68,8 +68,8 @@ function App() {
   // set duration everytime the player has loaded metadata
   const onLoadedMetadata = () => {
     const seconds = Math.floor(audioRef.current.duration)
-    setDuration(seconds)
     progressBarRef.current.max = seconds
+    setDuration(seconds)
   
     // try {
     //   await audioRef.current.onLoadedMetadata
@@ -106,10 +106,9 @@ function App() {
     audioRef.current.pause();
   };
   
-  const changeAudioToProgressBar = async () => {
-      await audioRef.current.onLoadedMetadata
-      audioRef.current.currentTime = progressBarRef.current.value;
-      setCurrentTime(progressBarRef.current.value);
+  const changeAudioToProgressBar =  () => {
+    audioRef.current.currentTime = progressBarRef.current.value;
+    setCurrentTime(progressBarRef.current.value);
   }
 
   const calculateTime = (secs) => {
