@@ -114,29 +114,14 @@ function App() {
   const changeAudioToProgressBar =  async() => {
     if (isPlaying) {
       await play()
+      setCurrentTime(progressBarRef.current.value);
+      audioRef.current.currentTime = progressBarRef.current.value;
     } else {
       await pause()
+      setCurrentTime(progressBarRef.current.value);
+      audioRef.current.currentTime = progressBarRef.current.value;
     }
-    setCurrentTime(progressBarRef.current.value);
-    audioRef.current.currentTime = progressBarRef.current.value;
-    await waitOnCanPlay()
-  }
-
-
-  const waitOnCanPlay = async() => {
-    return new Promise((resolve, reject) => {
-      console.log("checking")
-      if(audioRef.current.currentTime = progressBarRef.current.value) {
-        console.log("succes")
-        resolve('Succes')
-      } else {
-        console.log("Failed")
-        reject('Failed')
-      }
-    })
-
-  }
-  
+  } 
 
   const calculateTime = (secs) => {
     const minutes = Math.floor(secs / 60);
