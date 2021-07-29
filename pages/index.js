@@ -28,14 +28,12 @@ function App() {
 
   // everytime we change song
   useEffect( () => {
-    console.log(audioRef.current, "before pause")
     pause();
     // for first render of the page, makes the player on pause
     if (isReady.current) {
-      console.log(audioRef.current, "before play")
-      play();
-      console.log(audioRef.current, "after play")
-      setIsPlaying(true);
+          play();
+          setIsPlaying(true);
+          setDuration(audioRef.current.duration)
     } else {
       // once page has loaded once
       isReady.current = true;
@@ -86,7 +84,7 @@ function App() {
       if (!prevState) {
         await play();
       } else {
-        await pause();
+        pause();
       }
     } catch (err) {
 
@@ -96,6 +94,7 @@ function App() {
   const play = async () => {
     try {
       await audioRef.current.play()
+      setDuration(audioRef.current.duration)
     } catch {
       console.log("play promise failed, retrying...")
     }
@@ -105,21 +104,22 @@ function App() {
   const pause = async() => {
     try {
       await audioRef.current.pause()
+      setDuration(audioRef.current.duration)
     } catch {
       console.log("pause promise failed, retrying...")
     }
   };
   
   const changeAudioToProgressBar =  async() => {
-    audioRef.current.currentTime = progressBarRef.current.value;
     setCurrentTime(progressBarRef.current.value);
+    audioRef.current.currentTime = progressBarRef.current.value;
     await waitOnCanPlay()
   }
 
 
   const waitOnCanPlay = async() => {
     return new Promise((resolve, reject) => {
-      console.log("checking", audioRef.current.currentTime, progressBarRef.current.value)
+      console.log("checking")
       if(audioRef.current.currentTime = progressBarRef.current.value) {
         console.log("succes")
         resolve('Succes')
