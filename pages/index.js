@@ -53,6 +53,7 @@ function App() {
     } else {
       console.log("can not play")
     }
+    console.log(isPlaying)
   }, [currentTime]);
 
   // run on first load
@@ -111,6 +112,11 @@ function App() {
   };
   
   const changeAudioToProgressBar =  async() => {
+    if (isPlaying) {
+      await play()
+    } else {
+      await pause()
+    }
     setCurrentTime(progressBarRef.current.value);
     audioRef.current.currentTime = progressBarRef.current.value;
     await waitOnCanPlay()
