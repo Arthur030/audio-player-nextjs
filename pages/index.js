@@ -15,6 +15,7 @@ function App() {
   //toggle mute or unMute
   const [isMuted, setIsMuted] = useState(true);
   //tracks in tracks.json
+
   const {title, artist, audio, img} = tracks[tracksIndex];
   
 
@@ -23,24 +24,18 @@ function App() {
   //to have the player paused on first render
   const isReady = useRef(false);
   const volume = useRef();
-  
+
+
   // everytime we change song
   useEffect( () => {
+    console.log(audioRef.current, "before pause")
     pause();
     // for first render of the page, makes the player on pause
     if (isReady.current) {
-      // fix the error promise undeffined when skipping songs too fast
-        // const playPromise = audioRef.current.play();
-        // if (playPromise !== undefined) {
-        //   playPromise.then(() => {
-          play();
-          setIsPlaying(true);
-          setDuration(audioRef.current.duration)
-        // })
-        // .catch(error => {
-        //   console.log("handling error promise play()");
-        // })
-        // }
+      console.log(audioRef.current, "before play")
+      play();
+      console.log(audioRef.current, "after play")
+      setIsPlaying(true);
     } else {
       // once page has loaded once
       isReady.current = true;
@@ -49,15 +44,18 @@ function App() {
 
   // update on the current time of audio
   useEffect(() => {
-    // console.log(audioRef.current.currentTime)
     onLoadedMetadata();
     progressBarRef.current.value = Math.floor(audioRef.current.currentTime);
     progressBarRef.current.style.setProperty('--move-progressbar', `${progressBarRef.current.value / calculateTime(audioRef.current.duration) * 100}%`);
-
     if (currentTime >= audioRef.current.duration) {
       setTracksIndex(tracksIndex + 1)
     }
-  }, [audioRef?.current?.onLoadedMetadata, audioRef?.current?.readyState]);
+    if(!audioRef.current.onCanPlayThrough){
+      console.log("can play")
+    } else {
+      console.log("can not play")
+    }
+  }, [currentTime]);
 
   // run on first load
   useEffect(() => {
@@ -70,7 +68,6 @@ function App() {
     const seconds = Math.floor(audioRef.current.duration)
     progressBarRef.current.max = seconds
     setDuration(seconds)
-  
     // try {
     //   await audioRef.current.onLoadedMetadata
     //   console.log("onLoadedMetadata try")
@@ -82,36 +79,58 @@ function App() {
     // }
   };
   
-  const togglePlayPause = () => {
-    const prevState = isPlaying;
-    setIsPlaying(!prevState);
-    if (!prevState) {
-      play();
-    } else {
-      pause();
+  const togglePlayPause = async () => {
+    try {
+      const prevState = isPlaying;
+      setIsPlaying(!prevState);
+      if (!prevState) {
+        await play();
+      } else {
+        await pause();
+      }
+    } catch (err) {
+
     }
   };
 
   const play = async () => {
     try {
       await audioRef.current.play()
-      setDuration(audioRef.current.duration)
-      console.log("play promise success")
     } catch {
       console.log("play promise failed, retrying...")
     }
       
   };
 
-  const pause = () => {
-    audioRef.current.pause();
+  const pause = async() => {
+    try {
+      await audioRef.current.pause()
+    } catch {
+      console.log("pause promise failed, retrying...")
+    }
   };
   
   const changeAudioToProgressBar =  async() => {
-    await audioRef.current.readyState > 3
     audioRef.current.currentTime = progressBarRef.current.value;
     setCurrentTime(progressBarRef.current.value);
+    await waitOnCanPlay()
   }
+
+
+  const waitOnCanPlay = async() => {
+    return new Promise((resolve, reject) => {
+      console.log("checking", audioRef.current.currentTime, progressBarRef.current.value)
+      if(audioRef.current.currentTime = progressBarRef.current.value) {
+        console.log("succes")
+        resolve('Succes')
+      } else {
+        console.log("Failed")
+        reject('Failed')
+      }
+    })
+
+  }
+  
 
   const calculateTime = (secs) => {
     const minutes = Math.floor(secs / 60);
