@@ -33,7 +33,8 @@ function App() {
     if (isReady.current) {
           play();
           setIsPlaying(true);
-          setDuration(audioRef.current.duration)
+
+          console.log(currentTime, "currentTime", calculateTime(duration), "duration")
     } else {
       // once page has loaded once
       isReady.current = true;
@@ -95,7 +96,10 @@ function App() {
   const play = async () => {
     try {
       await audioRef.current.play()
-      setDuration(audioRef.current.duration)
+      setCurrentTime(progressBarRef.current.value);
+      audioRef.current.currentTime = progressBarRef.current.value;
+      console.log(audioRef.current.currentTime, "currentTime", calculateTime(audioRef.current.duration), "duration")
+
     } catch {
       console.log("play promise failed, retrying...")
     }
@@ -105,21 +109,19 @@ function App() {
   const pause = async() => {
     try {
       await audioRef.current.pause()
-      setDuration(audioRef.current.duration)
     } catch {
       console.log("pause promise failed, retrying...")
+      audioRef.current.currentTime = progressBarRef.current.value;
+      setCurrentTime(progressBarRef.current.value);
     }
   };
   
   const changeAudioToProgressBar =  async() => {
     if (isPlaying) {
       await play()
-      setCurrentTime(progressBarRef.current.value);
-      audioRef.current.currentTime = progressBarRef.current.value;
+      
     } else {
       await pause()
-      setCurrentTime(progressBarRef.current.value);
-      audioRef.current.currentTime = progressBarRef.current.value;
     }
   } 
 
